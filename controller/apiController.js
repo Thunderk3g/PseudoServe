@@ -1,4 +1,5 @@
 const ApiModel = require('../model/apiModel');
+const PostmanModel = require('../model/PostmanModel')
 const apiModel = new ApiModel();
 
 exports.createTempApi = (req, res) => {
@@ -22,4 +23,9 @@ exports.handleTempApiRequest = (req, res) => {
     } else {
         res.status(404).send('Not found');
     }
+};
+exports.importPostmanCollection = (req, res) => {
+    const postmanModel = new PostmanModel(req.app.locals.dynamicRoutes);
+    postmanModel.parseCollection(req.file.path);
+    res.send('Imported Postman collection and created APIs');
 };

@@ -1,0 +1,47 @@
+{
+	"info": {
+		"_postman_id": "067fdf90-dfe6-4a30-bd88-d77e4c725f21",
+		"name": "Sarathi Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "12810965",
+		"_collection_link": "https://red-spaceship-176168.postman.co/workspace/New-Team-Workspace~7a7b1112-016c-4f1e-9167-491cc5b208e2/collection/12810965-067fdf90-dfe6-4a30-bd88-d77e4c725f21?action=share&source=collection_link&creator=12810965"
+	},
+	"item": [
+		{
+			"name": "Validate-OTP",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phoneNumber\":\"919378067880\",\n    \"otp\":\"757812\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:3000/api/users/validate-otp"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Temp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"path\": \"/amc/app/api/v1/application_event\",\n  \"method\": \"POST\",\n  \"requestExample\": {\n  },\n  \"responseExample\": {\n  \"code\": \"100\",\n  \"msg\": \"Event logs created successfully\",\n  \"results\": {\n    \"application_id\": \"12345678\",\n    \"amcfundscheme_id\": null,\n    \"event_id\": \"AMCApplicationEventMaster object (1)\",\n    \"folio\": null,\n    \"amount\": null,\n    \"status\": null\n    }\n  }\n}\n\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/api/create-temp-api"
+			},
+			"response": []
+		}
+	]
+}
