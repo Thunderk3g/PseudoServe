@@ -1,7 +1,9 @@
+const express = require('express');
+const app = express();
 const ApiModel = require('../model/apiModel');
 const PostmanModel = require('../model/PostmanModel')
 const apiModel = new ApiModel();
-
+const postmanModel = new PostmanModel(app);
 exports.createTempApi = (req, res) => {
     const { path, method, requestExample, responseExample, expiresIn } = req.body;
 
@@ -11,7 +13,7 @@ exports.createTempApi = (req, res) => {
 };
 
 exports.handleTempApiRequest = (req, res) => {
-    const matchingRoute = apiModel.findRoute(req.method, req.path);
+    var matchingRoute = apiModel.findRoute(req.method, req.path);
 
     if (matchingRoute) {
         const validationTarget = req.method === 'GET' ? req.query : req.body;
@@ -20,12 +22,20 @@ exports.handleTempApiRequest = (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
         res.json(matchingRoute.responseExample);
-    } else {
-        res.status(404).send('Not found');
+    
+    }else {
+        matchingRoute = postmanModel.findRoute(req.method, req.path);
+        if (matchingRoute) {
+            // Assuming PostmanModel also implements validateRequest or similar validation logic
+            const { error } = postmanModel.validateRequest(matchingRoute, req.body);
+            if (error) {
+                return res.status(400).send(error.details[0].message);
+            }
+            return res.json(matchingRoute.responseExample);
+        }
     }
 };
 exports.importPostmanCollection = (req, res) => {
-    const postmanModel = new PostmanModel(req.app.locals.dynamicRoutes);
     postmanModel.parseCollection(req.file.path);
     res.send('Imported Postman collection and created APIs');
 };
