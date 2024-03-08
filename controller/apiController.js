@@ -22,8 +22,8 @@ exports.handleTempApiRequest = (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
         res.json(matchingRoute.responseExample);
-    
-    }else {
+
+    } else {
         matchingRoute = postmanModel.findRoute(req.method, req.path);
         if (matchingRoute) {
             // Assuming PostmanModel also implements validateRequest or similar validation logic
