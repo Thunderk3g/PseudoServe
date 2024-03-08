@@ -16,7 +16,6 @@ class PostmanModel {
     }
 
     setupEndpoint(item) {
-        console.log(item);
 
         const processItem = (currentItem) => {
             // Extract name and request from the current item
@@ -59,15 +58,10 @@ class PostmanModel {
 
                 // Store the dynamic route configuration
                 this.dynamicRoutes[routeKey] = { requestExample, responseExample, validationSchema };
-                console.log(this.dynamicRoutes);
 
                 // Register the dynamic route with Express
                 this.app[method](path, (req, res) => {
-                    // Logging request details
-                    console.log(`Request path: ${req.path}`);
-                    console.log(`Request method: ${req.method}`);
-                    console.log(`Request headers: ${JSON.stringify(req.headers)}`);
-                    console.log(`Request body: ${JSON.stringify(req.body)}`);
+                    // Logging request details    
 
                     // Match the request to a dynamic route and validate
                     const matchingRoute = this.dynamicRoutes[`${req.method.toUpperCase()} ${req.path}`];
@@ -99,9 +93,8 @@ class PostmanModel {
 
 
     findRoute(method, path) {
-        console.log(method, path);
-        console.log(this.dynamicRoutes)
-        return this.dynamicRoutes[`${method} ${path}`];
+        const newpath = '/api' + path;
+        return this.dynamicRoutes[`${method} ${newpath}`];
     }
 
     generateValidationSchema(requestExample) {
