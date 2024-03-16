@@ -1,4 +1,5 @@
 const express = require('express');
+<<<<<<< HEAD:PseudoServe-Backend/index.js
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const setupRoutes = require('./route/index.route'); // Adjusted to your file structure
@@ -16,6 +17,18 @@ app.use(express.json({ limit: '10mb' }));
 app.use(compression());
 app.use(express.urlencoded({ limit: '10mb', extended: true, parameterLimit: 50000 }));
 app.use(cors({ optionsSuccessStatus: 200 }));
+=======
+const bodyParser = require('body-parser');
+const setupRoutes = require('./route/index.route'); // Import using index.route.js
+const cors = require('cors'); // Import cors package
+
+
+const app = express();
+const port = 3000;
+app.use(cors()); // Enable CORS for all routes
+app.use(bodyParser.json());
+setupRoutes(app); // Setup routes using the index.route.js
+>>>>>>> 58820c0847d09a893616b3843652b766f4b2a17d:index.js
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URL)
