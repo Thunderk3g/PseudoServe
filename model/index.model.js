@@ -7,9 +7,9 @@ const db = {};
 db.mongoose = mongoose;
 
 db.role = require("./roles.model");
-db.ROLES = ["user", "rider", "admin"];
+db.ROLES = ["user", "admin"];
 
 module.exports = {
     ApiModel: apiModel,
-    db
+    db,
 };

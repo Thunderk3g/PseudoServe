@@ -14,7 +14,7 @@ exports.createTempApi = (req, res) => {
 
 exports.handleTempApiRequest = (req, res) => {
     var matchingRoute = apiModel.findRoute(req.method, req.path);
-
+    console.log(matchingRoute);
     // Direct header validation example
     if (matchingRoute) {
         const isValidHeaders = Object.entries(matchingRoute.headers).every(([key, value]) => req.headers[key] === value);

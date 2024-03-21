@@ -20,7 +20,6 @@ class ApiModel {
             requestExample,
             responseExample,
             expiresIn,
-            headers,
             validationSchema: this.generateValidationSchema(requestExample)
         };
 

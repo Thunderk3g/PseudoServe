@@ -58,7 +58,6 @@ class PostmanModel {
 
                 // Store the dynamic route configuration
                 this.dynamicRoutes[routeKey] = { requestExample, responseExample, validationSchema };
-                console.log(this.dynamicRoutes)
                 // Register the dynamic route with Express
                 this.app[method](path, (req, res) => {
                     // Logging request details    

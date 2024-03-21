@@ -1,10 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/user/user.model');
-const asyncHandler = require('../../middlewares/asyncHandler');
-const CustomError = require('../../utils/CustomError');
-const db = require("../../models/index.model");
-const Role = db.role;
+const User = require('../model/user.model');
+const asyncHandler = require('../middleware/asyncHandler');
+const CustomError = require('../utils/CustomError');
+const db = require('../model/index.model');
+const Role = require('../model/roles.model'); // Direct import
 // Environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -19,18 +19,26 @@ exports.register = asyncHandler(async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ name, email, password: hashedPassword, phoneNumber, verified: false, createdAt, updatedAt });
 
-    if (roles) {
+    if (roles && roles.length > 0) {
+        // Use `Role.find` to get an array of roles
         const assignedRoles = await Role.find({ name: { $in: roles } });
-        user.roles = assignedRoles.map(role => role._id);
+        if (assignedRoles && assignedRoles.length > 0) {
+            // Map over the array of role documents to extract their _id fields
+            user.roles = assignedRoles.map(role => role._id);
+        }
     } else {
+        // Handle the default role assignment as before
         const defaultRole = await Role.findOne({ name: 'user' });
-        user.roles = [defaultRole._id];
+        if (defaultRole) {
+            user.roles = [defaultRole._id];
+        }
     }
 
     await user.save();
 
     res.status(201).send({ message: 'User was registered successfully!' });
 });
+
 
 // Login user
 exports.login = asyncHandler(async (req, res) => {

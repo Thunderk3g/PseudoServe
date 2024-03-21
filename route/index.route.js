@@ -1,7 +1,7 @@
 const apiRoutes = require('./apiRoute');
-
+const userRoutes = require('./userRoute')
 module.exports = function (app) {
 
     app.use('/api', apiRoutes);
-    // Mount other route groups here
+    app.use('/user', userRoutes);
 };
