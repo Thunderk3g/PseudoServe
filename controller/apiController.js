@@ -15,15 +15,14 @@ exports.createTempApi = (req, res) => {
 exports.handleTempApiRequest = (req, res) => {
     var matchingRoute = apiModel.findRoute(req.method, req.path);
 
+    // Direct header validation example
     if (matchingRoute) {
-        const validationTarget = req.method === 'GET' ? req.query : req.body;
-        const { error } = apiModel.validateRequest(matchingRoute, validationTarget);
-        if (error) {
-            return res.status(400).send(error.details[0].message);
+        const isValidHeaders = Object.entries(matchingRoute.headers).every(([key, value]) => req.headers[key] === value);
+        if (!isValidHeaders) {
+            return res.status(400).send("Headers do not match the expected criteria.");
         }
-        res.json(matchingRoute.responseExample);
-
-    } else {
+    }
+    else {
         matchingRoute = postmanModel.findRoute(req.method, req.path);
         if (matchingRoute) {
             // Assuming PostmanModel also implements validateRequest or similar validation logic

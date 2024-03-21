@@ -1,7 +1,5 @@
 const Joi = require('joi');
-
 class ApiModel {
-
     constructor() {
         this.dynamicRoutes = {};
     }
@@ -14,33 +12,25 @@ class ApiModel {
         return schema;
     }
 
-    // Extend addRoute to include optional headers
+    // Updated to include header validation
     addRoute(path, method, requestExample, responseExample, expiresIn, headers = {}) {
         const routeKey = `${method.toUpperCase()} ${path}`;
-        const validationSchema = this.generateValidationSchema(requestExample);
-
-        // Store headers along with other route information
-        this.dynamicRoutes[routeKey] = { requestExample, responseExample, validationSchema, headers };
+        // For headers, we'll use express-validator in the controller, so just store them here
+        this.dynamicRoutes[routeKey] = {
+            requestExample,
+            responseExample,
+            expiresIn,
+            headers,
+            validationSchema: this.generateValidationSchema(requestExample)
+        };
 
         if (expiresIn) {
             setTimeout(() => delete this.dynamicRoutes[routeKey], expiresIn * 1000);
         }
-
-        return routeKey;
     }
 
-    // Modify findRoute to consider headers if they are provided
-    findRoute(method, path, incomingHeaders = {}) {
-        const route = this.dynamicRoutes[`${method.toUpperCase()} ${path}`];
-        if (!route) return null;
-
-        // If route has headers defined, match them with incoming headers
-        if (route.headers && Object.keys(route.headers).length > 0) {
-            const headersMatch = Object.entries(route.headers).every(([key, value]) => incomingHeaders[key] === value);
-            if (!headersMatch) return null;
-        }
-
-        return route;
+    findRoute(method, path) {
+        return this.dynamicRoutes[`${method.toUpperCase()} ${path}`];
     }
 
     validateRequest(route, data) {
